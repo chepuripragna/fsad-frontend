@@ -1,0 +1,17 @@
+.explore-page {
+    min-height: calc(100vh - 80px);
+    /* minus navbar */
+}
+
+.explore-subtitle {
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto var(--spacing-5);
+    font-size: 1.1rem;
+}
+
+.states-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-4);
+}

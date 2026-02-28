@@ -1,0 +1,207 @@
+.virtual-tour-page {
+    height: calc(100vh - 80px);
+    background: var(--text-dark);
+    color: var(--white);
+    overflow: hidden;
+}
+
+.tour-container {
+    display: flex;
+    height: 100%;
+}
+
+.tour-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.tour-header {
+    padding: var(--spacing-3);
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+}
+
+.progress-bar {
+    width: 200px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--saffron);
+}
+
+.tour-image-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+.tour-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hotspot-icon {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(230, 126, 34, 0.8);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    animation: pulse 2s infinite;
+}
+
+.hotspot-icon:hover,
+.hotspot-icon.active {
+    background: var(--saffron);
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(230, 126, 34, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(230, 126, 34, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(230, 126, 34, 0);
+    }
+}
+
+.tour-sidebar {
+    width: 350px;
+    background: rgba(31, 58, 138, 0.95);
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.info-panel {
+    padding: var(--spacing-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    min-height: 200px;
+}
+
+.info-panel h3 {
+    color: var(--saffron);
+}
+
+.chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--white);
+    color: var(--text-dark);
+}
+
+.chat-header {
+    padding: var(--spacing-2);
+    background: #E5E7EB;
+    text-align: center;
+    font-weight: 600;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: var(--spacing-3);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+}
+
+.message {
+    max-width: 85%;
+    padding: 10px 15px;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+}
+
+.message.guide {
+    background: #EBF8FF;
+    align-self: flex-start;
+    border-bottom-left-radius: 0;
+}
+
+.message.user {
+    background: var(--deep-blue);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 0;
+}
+
+.chat-input-form {
+    display: flex;
+    padding: var(--spacing-2);
+    background: #F3F4F6;
+    border-top: 1px solid var(--border-color);
+}
+
+.chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    outline: none;
+}
+
+.chat-send {
+    padding: 0 15px;
+    background: var(--saffron);
+    color: white;
+    border: none;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-weight: 600;
+}
+
+.mt-3 {
+    margin-top: var(--spacing-3);
+}
+
+@media screen and (max-width: 768px) {
+    .tour-container {
+        flex-direction: column;
+    }
+
+    .tour-sidebar {
+        width: 100%;
+        height: 50vh;
+    }
+
+    .virtual-tour-page {
+        height: auto;
+        overflow: visible;
+    }
+
+    .tour-view {
+        height: 50vh;
+    }
+}
