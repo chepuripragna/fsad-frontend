@@ -45,8 +45,8 @@ function App() {
 
                         {/* Explore Routes */}
                         <Route path="/states" element={<ExploreStates />} />
-                        <Route path="/states/:stateId" element={<StateDetail />} />
-                        <Route path="/place/:placeId" element={<PlaceDetail />} />
+                        <Route path="/states/:stateId" element={<StateDetails />} />
+                        <Route path="/place/:placeId" element={<PlaceDetails />} />
                         <Route path="/monuments" element={<Monuments />} />
 
                         {/* Culture Routes */}
