@@ -12,7 +12,6 @@ Inherit is a web application that promotes awareness of Indian culture, heritage
 - Cultural heritage resources
 
 ## User Roles
-
 ### Admin
 - Manage platform content
 - Maintain accurate information
