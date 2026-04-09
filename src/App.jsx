@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
+import PrivateRoute from './components/PrivateRoute';
 
 // Pages
 import Landing from './pages/Landing/Landing';
@@ -24,6 +25,7 @@ import TimelinePage from './pages/TimelinePage/TimelinePage';
 import VirtualTour from './pages/VirtualTour/VirtualTour';
 import Discussion from './pages/Discussion/Discussion';
 import Feedback from './pages/Feedback/Feedback';
+import Profile from './pages/Profile/Profile';
 
 // Dashboards
 import AdminDashboard from './pages/Dashboard/Admin/AdminDashboard';
@@ -38,36 +40,45 @@ function App() {
                 <Navbar />
                 <main className="main-content">
                     <Routes>
+
+                        {/* ✅ PUBLIC */}
                         <Route path="/" element={<Landing />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
-                        <Route path="/home" element={<Home />} />
 
-                        {/* Explore Routes */}
-                        <Route path="/states" element={<ExploreStates />} />
-                        <Route path="/states/:stateId" element={<StateDetails />} />
-                        <Route path="/place/:placeId" element={<PlaceDetails />} />
-                        <Route path="/monuments" element={<Monuments />} />
+                        {/* 🔒 PROTECTED */}
+                        <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
 
-                        {/* Culture Routes */}
-                        <Route path="/culture/practices" element={<CulturalPractices />} />
-                        <Route path="/culture/festivals" element={<Festivals />} />
-                        <Route path="/culture/architecture" element={<Architecture />} />
-                        <Route path="/culture/timeline" element={<TimelinePage />} />
+                        <Route path="/states" element={<PrivateRoute><ExploreStates /></PrivateRoute>} />
+                        <Route path="/states/:stateId" element={<PrivateRoute><StateDetail /></PrivateRoute>} />
+                        <Route path="/place/:placeId" element={<PrivateRoute><PlaceDetail /></PrivateRoute>} />
+                        <Route path="/monuments" element={<PrivateRoute><Monuments /></PrivateRoute>} />
 
-                        {/* Interactive */}
-                        <Route path="/virtual-tour" element={<VirtualTour />} />
-                        <Route path="/discussion" element={<Discussion />} />
-                        <Route path="/feedback" element={<Feedback />} />
+                        <Route path="/culture/practices" element={<PrivateRoute><CulturalPractices /></PrivateRoute>} />
+                        <Route path="/culture/festivals" element={<PrivateRoute><Festivals /></PrivateRoute>} />
+                        <Route path="/culture/architecture" element={<PrivateRoute><Architecture /></PrivateRoute>} />
+                        <Route path="/culture/timeline" element={<PrivateRoute><TimelinePage /></PrivateRoute>} />
 
-                        {/* Dashboards */}
-                        <Route path="/dashboard/admin" element={<AdminDashboard />} />
-                        <Route path="/dashboard/enthusiast" element={<EnthusiastDashboard />} />
-                        <Route path="/dashboard/creator" element={<CreatorDashboard />} />
-                        <Route path="/dashboard/guide" element={<GuideDashboard />} />
+                        <Route path="/virtual-tour" element={<PrivateRoute><VirtualTour /></PrivateRoute>} />
+                        <Route path="/discussion" element={<PrivateRoute><Discussion /></PrivateRoute>} />
+                        <Route path="/feedback" element={<PrivateRoute><Feedback /></PrivateRoute>} />
+
+                        <Route path="/dashboard/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>} />
+                        <Route path="/dashboard/enthusiast" element={<PrivateRoute><EnthusiastDashboard /></PrivateRoute>} />
+                        <Route path="/dashboard/creator" element={<PrivateRoute><CreatorDashboard /></PrivateRoute>} />
+                        <Route path="/dashboard/guide" element={<PrivateRoute><GuideDashboard /></PrivateRoute>} />
+
+                        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
                         {/* Fallback */}
                         <Route path="*" element={<Navigate to="/" replace />} />
+
+                        
+    
+        
+    
+
+
                     </Routes>
                 </main>
                 <Footer />

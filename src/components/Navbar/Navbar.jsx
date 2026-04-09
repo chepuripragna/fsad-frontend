@@ -7,26 +7,44 @@ const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const navigate = useNavigate();
 
+    // ✅ Use token instead of user
+    const token = localStorage.getItem("token");
+
+    // ✅ Correct logout
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        navigate('/login');
+    };
+
     return (
         <nav className="navbar">
             <div className="navbar-container container">
                 <Link to="/" className="navbar-logo">
                     InHerit
                 </Link>
+
                 <div className="menu-icon" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     <span className="icon">{isMenuOpen ? '✕' : '☰'}</span>
                 </div>
+
                 <ul className={isMenuOpen ? 'nav-menu active' : 'nav-menu'}>
+
                     <li className="nav-item">
                         <NavLink to="/home" className={({ isActive }) => 'nav-links' + (isActive ? ' active-link' : '')} onClick={() => setIsMenuOpen(false)}>Home</NavLink>
                     </li>
+
                     <li className="nav-item">
                         <NavLink to="/states" className={({ isActive }) => 'nav-links' + (isActive ? ' active-link' : '')} onClick={() => setIsMenuOpen(false)}>Explore by State</NavLink>
                     </li>
+
                     <li className="nav-item">
                         <NavLink to="/monuments" className={({ isActive }) => 'nav-links' + (isActive ? ' active-link' : '')} onClick={() => setIsMenuOpen(false)}>Monuments</NavLink>
                     </li>
-                    <li className="nav-item" onMouseEnter={() => setIsDropdownOpen(true)} onMouseLeave={() => setIsDropdownOpen(false)}>
+
+                    <li className="nav-item"
+                        onMouseEnter={() => setIsDropdownOpen(true)}
+                        onMouseLeave={() => setIsDropdownOpen(false)}
+                    >
                         <div className="nav-links has-dropdown">
                             Culture ▾
                             {isDropdownOpen && (
@@ -39,19 +57,68 @@ const Navbar = () => {
                             )}
                         </div>
                     </li>
+
                     <li className="nav-item">
                         <NavLink to="/virtual-tour" className={({ isActive }) => 'nav-links' + (isActive ? ' active-link' : '')} onClick={() => setIsMenuOpen(false)}>Virtual Tour</NavLink>
                     </li>
+
                     <li className="nav-item">
                         <NavLink to="/discussion" className={({ isActive }) => 'nav-links' + (isActive ? ' active-link' : '')} onClick={() => setIsMenuOpen(false)}>Discussion</NavLink>
                     </li>
+
                     <li className="nav-item">
                         <NavLink to="/feedback" className={({ isActive }) => 'nav-links' + (isActive ? ' active-link' : '')} onClick={() => setIsMenuOpen(false)}>Feedback</NavLink>
                     </li>
+
+                    {/* ✅ Auth Section */}
                     <li className="nav-item nav-auth">
-                        <button onClick={() => { setIsMenuOpen(false); navigate('/login'); }} className="btn-outline">Login</button>
-                        <button onClick={() => { setIsMenuOpen(false); navigate('/signup'); }} className="btn-primary">Sign Up</button>
+                        {token ? (
+                            <>
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate('/profile');
+                                    }}
+                                    className="btn-primary"
+                                >
+                                    Profile
+                                </button>
+
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        handleLogout();
+                                    }}
+                                    className="btn-outline"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate('/login');
+                                    }}
+                                    className="btn-outline"
+                                >
+                                    Login
+                                </button>
+
+                                <button
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate('/signup');
+                                    }}
+                                    className="btn-primary"
+                                >
+                                    Sign Up
+                                </button>
+                            </>
+                        )}
                     </li>
+
                 </ul>
             </div>
         </nav>

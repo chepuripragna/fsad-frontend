@@ -1,52 +1,64 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Card from '../../components/Card/Card';
-import { statesData } from '../../data/statesData';
 import './Monuments.css';
 
 const Monuments = () => {
+
+    const location = useLocation();
+
     const [allMonuments, setAllMonuments] = useState([]);
     const [filteredMonuments, setFilteredMonuments] = useState([]);
     const [filterState, setFilterState] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
 
+    // Get state from URL
+    const queryParams = new URLSearchParams(location.search);
+    const stateFromURL = queryParams.get("state");
+
+    // ✅ FIXED FETCH
     useEffect(() => {
-        // Extract all places from statesData to treat them as monuments
-        const places = [];
-        statesData.forEach(state => {
-            state.places.forEach(place => {
-                places.push({
-                    ...place,
-                    stateName: state.name,
-                    stateId: state.id
-                });
-            });
-        });
-        setAllMonuments(places);
-        setFilteredMonuments(places);
+        fetch("http://localhost:8080/api/monuments")
+            .then(res => res.json())
+            .then(data => {
+                console.log("Monuments:", data);
+                setAllMonuments(data);
+            })
+            .catch(err => console.log(err));
     }, []);
 
+    // ✅ FIXED FILTERING
     useEffect(() => {
-        let result = allMonuments;
+        let result = [...allMonuments];
 
-        if (filterState !== 'All') {
-            result = result.filter(m => m.stateId === filterState);
-        }
+        // Filter from URL
+        // URL filter
+if (stateFromURL) {
+    result = result.filter(m => m.state === stateFromURL);
+}
 
+// Dropdown filter
+if (filterState !== 'All') {
+    result = result.filter(m => m.state === filterState);
+}
+
+        // Search filter
         if (searchTerm) {
             result = result.filter(m =>
-                m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                m.description.toLowerCase().includes(searchTerm.toLowerCase())
+                (m.description || "").toLowerCase().includes(searchTerm.toLowerCase())
             );
         }
 
         setFilteredMonuments(result);
-    }, [filterState, searchTerm, allMonuments]);
+    }, [filterState, searchTerm, allMonuments, stateFromURL]);
 
     return (
         <div className="monuments-page container section-padding">
             <div className="monuments-header">
                 <h1 className="section-title">Majestic Monuments</h1>
-                <p className="text-center">Explore the architectural marvels across India.</p>
+                <p className="text-center">
+                    Explore the architectural marvels across India.
+                </p>
 
                 <div className="filters-container">
                     <input
@@ -56,15 +68,19 @@ const Monuments = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                         className="search-input"
                     />
+
                     <select
                         value={filterState}
                         onChange={(e) => setFilterState(e.target.value)}
                         className="filter-select"
                     >
                         <option value="All">All States</option>
-                        {statesData.map(state => (
-                            <option key={state.id} value={state.id}>{state.name}</option>
-                        ))}
+                        <option value="Telangana">Telangana</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
                     </select>
                 </div>
             </div>
@@ -74,14 +90,16 @@ const Monuments = () => {
                     filteredMonuments.map(monument => (
                         <Card
                             key={monument.id}
-                            title={monument.name}
-                            description={`${monument.stateName} • ${monument.description}`}
-                            image={monument.image}
+                            title={monument.name || monument.title || monument.description || "No Title"}
+                            description={monument.state}
+                            image={monument.imageUrl}
                             linkTo={`/place/${monument.id}`}
                         />
                     ))
                 ) : (
-                    <div className="no-results">No monuments found matching your criteria.</div>
+                    <div className="no-results">
+                        No monuments found matching your criteria.
+                    </div>
                 )}
             </div>
         </div>

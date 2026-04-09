@@ -1,0 +1,38 @@
+.profile-page {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(rgba(248, 246, 241, 0.9), rgba(248, 246, 241, 0.9)),
+        url('https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&q=80&w=2000');
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-wrapper {
+    max-width: 500px;
+    width: 100%;
+}
+
+.profile-card {
+    background: var(--white);
+    text-align: left;
+}
+
+.profile-title {
+    text-align: center;
+    color: var(--deep-blue);
+}
+
+.profile-field {
+    background: var(--ivory);
+    padding: 12px;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-3);
+    font-size: 1rem;
+}
+
+.profile-btn {
+    width: 100%;
+    margin-top: var(--spacing-3);
+}

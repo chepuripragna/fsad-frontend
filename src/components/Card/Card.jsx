@@ -8,17 +8,21 @@ const Card = ({ title, image, description, linkTo }) => {
         <div className="card">
             <div className="card-image-wrapper">
                 <img
-                    src={image || defaultImage}
+                    src={image ? image : defaultImage}
                     alt={title}
                     className="card-image"
                     onError={(e) => { e.target.src = defaultImage }}
                 />
             </div>
+
             <div className="card-content">
-                <h3 className="card-title">{title}</h3>
+                <h3 className="card-title">{title || "No Title"}</h3>
                 <p className="card-description">{description}</p>
+
                 {linkTo && (
-                    <Link to={linkTo} className="card-link">Explore →</Link>
+                    <Link to={linkTo} className="card-link">
+                        Explore →
+                    </Link>
                 )}
             </div>
         </div>
