@@ -7,22 +7,32 @@ import './PlaceDetail.css';
 const PlaceDetail = () => {
     const { placeId } = useParams();
     const [placeInfo, setPlaceInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/monuments")
+        fetch("https://fsad-backend-bd5s.onrender.com/api/monuments")
             .then(res => res.json())
             .then(data => {
                 const found = data.find(
                     (m) => m.id.toString() === placeId
                 );
                 setPlaceInfo(found);
+                setLoading(false);
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                setLoading(false);
+            });
     }, [placeId]);
 
-    // 🔴 Loading / Not found handling
-    if (!placeInfo) {
+    // ✅ Loading
+    if (loading) {
         return <div className="container section-padding">Loading...</div>;
+    }
+
+    // ✅ Not found
+    if (!placeInfo) {
+        return <div className="container section-padding">Place not found.</div>;
     }
 
     const timelineEvents = [
@@ -36,13 +46,14 @@ const PlaceDetail = () => {
             <div className="place-hero">
                 <img
                     src={placeInfo.imageUrl || defaultImage}
-                    alt={placeInfo.name}
+                    alt={placeInfo.title}
                     className="place-hero-img"
                     onError={(e) => { e.target.src = defaultImage }}
                 />
                 <div className="place-hero-overlay">
                     <div className="container">
-                        <h1 className="place-title">{placeInfo.name}</h1>
+                        {/* ✅ FIXED */}
+                        <h1 className="place-title">{placeInfo.title}</h1>
                         <p className="place-location">{placeInfo.state}</p>
                     </div>
                 </div>

@@ -23,7 +23,7 @@ const Login = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:8080/api/auth/login", {
+            const res = await fetch("https://fsad-backend-bd5s.onrender.com/api/auth/login",  {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -36,19 +36,25 @@ const Login = () => {
                 return;
             }
 
-            // ✅ Get JWT token (not JSON anymore)
+            // ✅ Get JWT token (plain text)
             const token = await res.text();
 
-            // ✅ Store token
+            // ⚠️ Clear any old token (important)
+            localStorage.removeItem("token");
+
+            // ✅ Store new token
             localStorage.setItem("token", token);
+
+            // ✅ Quick verification (debug purpose)
+            console.log("Stored Token:", localStorage.getItem("token"));
 
             alert("Login successful");
 
-            // ✅ Navigate (role handling later)
+            // ✅ Redirect
             navigate('/home');
 
         } catch (error) {
-            console.error(error);
+            console.error("Login error:", error);
             alert("Server error");
         }
     };

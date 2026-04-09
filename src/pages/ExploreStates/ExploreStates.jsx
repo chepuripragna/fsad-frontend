@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../../components/Card/Card';
+import { statesData } from '../../data/statesData';   // 🔥 IMPORT THIS
 import './ExploreStates.css';
 
 const ExploreStates = () => {
 
     const [states, setStates] = useState([]);
 
+    // ✅ USE STATIC DATA (NO API)
     useEffect(() => {
-        fetch("http://localhost:8080/api/states")
-            .then(res => res.json())
-            .then(data => {
-                console.log("States:", data);
-                setStates(data);
-            })
-            .catch(err => console.log(err));
+        console.log("States:", statesData);
+        setStates(statesData);
     }, []);
 
     return (
@@ -25,12 +22,12 @@ const ExploreStates = () => {
 
             <div className="states-grid">
                 {states.length > 0 ? (
-                    states.map(state => (
+                    states.map((state, index) => (
                         <Card
-                            key={state.id}
+                            key={index}
                             title={state.name}
                             description={state.description}
-                            image={state.imageUrl}
+                            image={state.image}
                             linkTo={`/monuments?state=${state.name}`}
                         />
                     ))
