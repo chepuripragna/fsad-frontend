@@ -41,12 +41,12 @@ function App() {
                 <main className="main-content">
                     <Routes>
 
-                        {/* ✅ PUBLIC */}
+                        {/*PUBLIC */}
                         <Route path="/" element={<Landing />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/signup" element={<Signup />} />
 
-                        {/* 🔒 PROTECTED */}
+                        {/* PROTECTED */}
                         <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
 
                         <Route path="/states" element={<PrivateRoute><ExploreStates /></PrivateRoute>} />
@@ -70,7 +70,7 @@ function App() {
 
                         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
 
-                        {/* Fallback */}
+                        
                         <Route path="*" element={<Navigate to="/" replace />} />
 
                         

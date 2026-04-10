@@ -12,12 +12,16 @@ const Monuments = () => {
     const [filterState, setFilterState] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
 
-    const role = localStorage.getItem("role");
+    // ✅ SAFE USER FETCH
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+
+    // 🔥 ROBUST ROLE CHECK
+    const isAdmin = user?.role?.toString().toUpperCase().includes("ADMIN");
 
     const queryParams = new URLSearchParams(location.search);
     const stateFromURL = queryParams.get("state");
 
-    // ✅ FETCH (only initial data from backend)
     useEffect(() => {
         fetch("https://fsad-backend-bd5s.onrender.com/api/monuments")
             .then(res => res.json())
@@ -28,7 +32,6 @@ const Monuments = () => {
             .catch(err => console.log(err));
     }, []);
 
-    // ✅ FILTER
     useEffect(() => {
         let result = [...allMonuments];
 
@@ -49,7 +52,7 @@ const Monuments = () => {
         setFilteredMonuments(result);
     }, [filterState, searchTerm, allMonuments, stateFromURL]);
 
-    // ✅ ADD (frontend only)
+    // ✅ ADD
     const handleAdd = () => {
         const title = prompt("Enter title:");
         if (!title) return;
@@ -66,23 +69,19 @@ const Monuments = () => {
             imageUrl
         };
 
-        const updated = [...allMonuments, newMonument];
-        setAllMonuments(updated);
-
+        setAllMonuments(prev => [...prev, newMonument]);
         alert("Added (frontend)");
     };
 
-    // ✅ DELETE (frontend only)
+    // ✅ DELETE
     const handleDelete = (id) => {
         if (!window.confirm("Delete this monument?")) return;
 
-        const updated = allMonuments.filter(m => m.id !== id);
-        setAllMonuments(updated);
-
+        setAllMonuments(prev => prev.filter(m => m.id !== id));
         alert("Deleted (frontend)");
     };
 
-    // ✅ UPDATE (frontend only)
+    // ✅ UPDATE
     const handleUpdate = (monument) => {
         const title = prompt("Update title:", monument.title);
         if (!title) return;
@@ -91,13 +90,13 @@ const Monuments = () => {
         const state = prompt("Update state:", monument.state);
         const imageUrl = prompt("Update image URL:", monument.imageUrl);
 
-        const updatedList = allMonuments.map(m =>
-            m.id === monument.id
-                ? { ...m, title, description, state, imageUrl }
-                : m
+        setAllMonuments(prev =>
+            prev.map(m =>
+                m.id === monument.id
+                    ? { ...m, title, description, state, imageUrl }
+                    : m
+            )
         );
-
-        setAllMonuments(updatedList);
 
         alert("Updated (frontend)");
     };
@@ -108,7 +107,7 @@ const Monuments = () => {
             <div className="monuments-header">
                 <h1 className="section-title">Majestic Monuments</h1>
 
-                {role === "ADMIN" && (
+                {isAdmin && (
                     <button onClick={handleAdd} className="add-btn">
                         + Add Monument
                     </button>
@@ -120,7 +119,7 @@ const Monuments = () => {
                     filteredMonuments.map((monument) => (
                         <div key={monument.id} style={{ position: "relative" }}>
 
-                            {role === "ADMIN" && (
+                            {isAdmin && (
                                 <button
                                     onClick={() => handleDelete(monument.id)}
                                     style={{
@@ -139,7 +138,7 @@ const Monuments = () => {
                                 </button>
                             )}
 
-                            {role === "ADMIN" && (
+                            {isAdmin && (
                                 <button
                                     onClick={() => handleUpdate(monument)}
                                     style={{

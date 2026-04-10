@@ -7,7 +7,7 @@ const ExploreStates = () => {
 
     const [states, setStates] = useState([]);
 
-    // ✅ USE STATIC DATA (NO API)
+    
     useEffect(() => {
         console.log("States:", statesData);
         setStates(statesData);

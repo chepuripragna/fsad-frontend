@@ -4,19 +4,16 @@ import './Profile.css';
 const Profile = () => {
     const token = localStorage.getItem("token");
 
-    // 🔥 If not logged in
     if (!token) {
         return <h2>Please login first</h2>;
     }
 
-    // 🔥 Decode JWT token
     const payload = JSON.parse(atob(token.split('.')[1]));
 
     const email = payload.sub;
     const role = payload.role;
 
-    // ⚠️ Name is NOT in token → so show placeholder
-    const name = email.split("@")[0]; // simple fallback
+    const name = email.split("@")[0]; 
 
     return (
         <div className="profile-page container section-padding">

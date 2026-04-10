@@ -4,20 +4,20 @@ export function callApi(reqMethod, url, data, responseHandler)
 {
     let options;
 
-    // 🔥 Get token from localStorage
+    //Get token from localStorage
     const token = localStorage.getItem("token");
 
-    // 🔥 Common headers
+    
     const headers = {
         'Content-Type': 'application/json'
     };
 
-    // 🔥 Attach token if available
+    //Attach token if available
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    // 🔥 Set request options
+    //Set request options
     if (reqMethod === "GET" || reqMethod === "DELETE") {
         options = {
             method: reqMethod,
@@ -31,7 +31,7 @@ export function callApi(reqMethod, url, data, responseHandler)
         };
     }
 
-    // 🔥 API call
+    //API call
     fetch(url, options)
         .then((response) => {
             if (!response.ok)

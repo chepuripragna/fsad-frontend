@@ -8,10 +8,17 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
+    const parseJwt = (token) => {
+        try {
+            return JSON.parse(atob(token.split('.')[1]));
+        } catch (e) {
+            return null;
+        }
+    };
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
-        // 🔥 Basic validation
         if (!email.includes("@")) {
             alert("Enter valid email");
             return;
@@ -23,7 +30,7 @@ const Login = () => {
         }
 
         try {
-            const res = await fetch("https://fsad-backend-bd5s.onrender.com/api/auth/login",  {
+            const res = await fetch("https://fsad-backend-bd5s.onrender.com/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -36,21 +43,55 @@ const Login = () => {
                 return;
             }
 
-            // ✅ Get JWT token (plain text)
             const token = await res.text();
 
-            // ⚠️ Clear any old token (important)
-            localStorage.removeItem("token");
+            // ✅ clear old data (important)
+            localStorage.clear();
 
-            // ✅ Store new token
             localStorage.setItem("token", token);
 
-            // ✅ Quick verification (debug purpose)
-            console.log("Stored Token:", localStorage.getItem("token"));
+            const decoded = parseJwt(token);
+
+            console.log("FULL DECODED TOKEN:", decoded);
+
+            // 🔥 STRICT ROLE EXTRACTION
+            let role = null;
+
+            if (decoded?.role) {
+                role = decoded.role;
+            } else if (decoded?.roles) {
+                role = Array.isArray(decoded.roles)
+                    ? decoded.roles[0]
+                    : decoded.roles;
+            } else if (decoded?.authorities) {
+                role = decoded.authorities[0]?.authority;
+            }
+
+            if (!role) {
+                console.error("❌ ROLE NOT FOUND IN TOKEN");
+                alert("Role not found. Contact backend.");
+                return;
+            }
+
+            // normalize role
+            role = role.toString().toUpperCase();
+
+            // remove ROLE_ prefix if exists
+            if (role.startsWith("ROLE_")) {
+                role = role.replace("ROLE_", "");
+            }
+
+            const userData = {
+                email: decoded?.sub || email,
+                role: role
+            };
+
+            localStorage.setItem("user", JSON.stringify(userData));
+
+            console.log("✅ FINAL STORED USER:", userData);
 
             alert("Login successful");
 
-            // ✅ Redirect
             navigate('/home');
 
         } catch (error) {
